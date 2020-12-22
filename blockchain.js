@@ -12,6 +12,34 @@ class BlockChain {
         return block
     }
 
+    isValid(chain){
+        if(JSON.stringify(chain[0]) !== JSON.stringify(Block.genesisBlock())){
+            return false
+        }
+        for(let i=1 ; i < chain.length; i++){
+            const block = chain[i]
+            const lastBlock = chain[i-1]
+            if(block.lastHash !== lastBlock.hash){
+                return false
+            }
+        }
+        return true
+    }
+
+    replace(newChain){
+        console.log(newChain.length)
+        console.log( this.chain.length)
+        if(newChain.length <= this.chain.length){
+            console.log('new chain must be longer than current chain')
+            return
+        }
+        if(!this.isValid(newChain)){
+            console.log('new chain is valid')
+            return
+        }
+        this.chain = newChain
+    }
+
     mineBlockData(data) {
         const lastBlock = this.getLatestBlock()
         const block = Block.mineBlock(lastBlock, data)
